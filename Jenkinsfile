@@ -128,9 +128,9 @@ pipeline {
             }
             steps {
                 // Prevent any older builds from deploying to production
-                milestone(1)
+               // milestone(1)
                 input("Proceed and deploy to Production?")
-                milestone(2)
+               // milestone(2)
 
                 script {
                     DEPLOY_PROD = true
