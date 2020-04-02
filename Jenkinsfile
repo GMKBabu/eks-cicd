@@ -7,6 +7,12 @@
     4. Deploy to dev and test
     5. Deploy to staging and test
     6. Optionally deploy to production and test
+	usermod -aG docker jenkins
+    usermod -aG root jenkins
+	chmod 664 /var/run/docker.sock
+But none of them work for me, I tried:
+
+chmod 777 /var/run/docker.sock
  */
 
 pipeline {
@@ -17,13 +23,13 @@ pipeline {
         GITHUB_URL = "https://github.com/GMKBabu/eks-cicd.git"
         GITHUB_CREDENTIALS_ID = "0b61464e-dd11-4760-b30a-f988490eb429"
         GITHUB_BRANCH_NAME = 'master'
-        //CUSTOM_TAG = "test"
+        CUSTOM_TAG = "test"
         AWS_DEFAULT_REGION = 'us-east-1'
         AWS_ACCOUNT_ID = "504263020452"
         IMAGE_REPO_NAME = "eks"
         TEST_LOCAL_PORT = "80"
 		CUSTOM_BUILD_NUMBER = "DEV-PRD-${BUILD_NUMBER}"
-		ID = "${IMAGE_REPO_NAME}"
+		ID = "${IMAGE_REPO_NAME}:${CUSTOM_TAG}"
     }
     triggers {
     //Run Polling of GitHub every minute everyday of the week
@@ -66,7 +72,7 @@ pipeline {
 
             }
         }
-        /*
+
         // Run the 3 tests on the currently running ACME Docker container
         stage('Local tests') {
             parallel {
@@ -87,6 +93,7 @@ pipeline {
                 }
             }
         }
+		/*
         ////////// Step 3 //////////
 		
         stage("Publish Docker Image") {
