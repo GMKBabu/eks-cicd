@@ -120,7 +120,7 @@ pipeline {
         // Waif for user manual approval, or proceed automatically if DEPLOY_TO_PROD is true
         stage('Go for Production?') {
             when {
-                anyof {
+                allOf {
                     environment name: 'GITHUB_BRANCH_NAME', value: 'master'
                     environment name: 'DEPLOY_TO_PROD', value: 'false'
                 }
@@ -139,7 +139,7 @@ pipeline {
 
         stage('Deploy to Production') {
             when {
-                anyof {
+                anyOf {
                     expression { DEPLOY_PROD == true }
                     environment name: 'DEPLOY_TO_PROD', value: 'true'
                 }
