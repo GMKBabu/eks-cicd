@@ -55,19 +55,25 @@ pipeline {
         }
         ////////// Step 2 //////////
         stage('Build Docker Image and Test') {
-            steps {
-                echo "Building application and Docker image"
-                sh "docker build -t $IMAGE_NAME  ${WORKSPACE}/."
+            parallel {
+                stage ('DOcker Image Build') {
+                    steps {
+                        echo "Building application and Docker image"
+                        sh "docker build -t $IMAGE_NAME  ${WORKSPACE}/."
+                        }
+                    }
 
-                echo "Running Test"
+                stage('Docker Container Test') {
+                    steps {
+                        echo "Running Test"
 
-                // Kill container in case there is a leftover
-                sh "[ -z \"\$(docker ps -a | grep ${ID} 2>/dev/null)\" ] || docker rm -f ${ID}"
+                        // Kill container in case there is a leftover
+                        sh "[ -z \"\$(docker ps -a | grep ${ID} 2>/dev/null)\" ] || docker rm -f ${ID}"
 
-                echo "Starting ${IMAGE_REPO_NAME} container"
-                sh "docker run --detach --name ${ID} --rm --publish ${TEST_LOCAL_PORT}:80 ${IMAGE_NAME}"
-
-
+                        echo "Starting ${IMAGE_REPO_NAME} container"
+                        sh "docker run --detach --name ${ID} --rm --publish ${TEST_LOCAL_PORT}:80 ${IMAGE_NAME}"
+                    }
+                }
             }
         }
 
@@ -84,16 +90,28 @@ pipeline {
         ////////// Step 3 //////////
 		
         stage("Publish Docker Image") {
-            steps {
-                sh "echo Stop and remove container"
-                sh 'docker stop "${ID}"'
-				sh "echo login to ecr repository"
-				sh '(eval \$(aws ecr get-login  --no-include-email --region "${AWS_DEFAULT_REGION}"))'
-				sh 'echo Pushing "${IMAGE_NAME}" image to registry'
-				sh "echo change the docker image tag name"
-				sh 'docker tag "${IMAGE_NAME}" "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}"'
-                sh "echo Pushing the Docker image...  "
-				sh 'docker push "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}"'
+            parallel {
+                stage('stop docker container') {
+                    steps {
+                        echo Stop and remove container"
+                        sh 'docker stop "${ID}"'
+                    }
+                }
+                stage('Login ECR Repository') {
+                    steps {
+                        echo "login to ecr repository"
+                        sh '(eval \$(aws ecr get-login  --no-include-email --region "${AWS_DEFAULT_REGION}"))'
+                    }
+                }
+                stage('Pushing teh docker images to ECR Repository') {
+                    steps {
+                        echo 'Pushing "${IMAGE_NAME}" image to registry'
+                        echo "change the docker image tag name"
+                        sh 'docker tag "${IMAGE_NAME}" "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}"'
+                        echo "Pushing the Docker image...  "
+				        sh 'docker push "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}"'
+                    }
+                }
             }
         }
     }
