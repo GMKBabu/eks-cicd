@@ -78,7 +78,7 @@ pipeline {
             parallel {
                 stage('Curl http_code') {
                     steps {
-                        sh "curl -vG "http://${host_ip}:${TEST_LOCAL_PORT}"
+                        sh "curl -vG 'http://${host_ip}:${TEST_LOCAL_PORT}'"
                     }
                 }
             }
