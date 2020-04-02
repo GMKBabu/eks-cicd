@@ -67,7 +67,7 @@ pipeline {
                 sh "docker run --detach --name ${ID} --rm --publish ${TEST_LOCAL_PORT}:80 ${id}"
 
                 script {
-                    host_ip = sh("hostname -i")
+                    host_ip = $(hostname -i)
                 }
 
             }
