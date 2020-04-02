@@ -31,6 +31,7 @@ pipeline {
 		CUSTOM_BUILD_NUMBER = "DEV-PRD-${BUILD_NUMBER}"
 		ID = "${IMAGE_REPO_NAME}"
 		IMAGE_NAME = "${IMAGE_REPO_NAME}:${CUSTOM_TAG}"
+        TOPIC_ARN = "arn:aws:sns:us-east-1:504263020452:config-topic"
     }
     triggers {
     //Run Polling of GitHub every minute everyday of the week
@@ -115,4 +116,28 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            echo "Successful build occured"
+            script {
+                currentBuild.result = "SUCCESS"
+            }
+            NotifyEmail()
+        }
+        failure {
+            echo "failure build occured"
+            script {
+                currentBuild.result = "FAILURE"
+            }
+            NotifyEmail()
+        }
+
+    }
+}
+
+def NotifyEmail() {
+    sh 'aws sns publish --topic-arn ${TOPIC_ARN} \
+    --message \"${currentBuild.result?:'SUCCESS'}\" --subject \"Status: Job_Name: ${JOB_NAME}\" \
+    --region "${AWS_DEFAULT_REGION}"'
 }
