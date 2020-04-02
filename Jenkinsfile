@@ -72,7 +72,6 @@ pipeline {
 
         // Run the 3 tests on the currently running ACME Docker container
         stage('Local tests') {
-            parallel {
                 stage('Curl') {
                     steps {
 					    sh '''
@@ -81,8 +80,7 @@ pipeline {
 						'''
                         
                     }
-             
-            }
+             }
         }
 		/*
         ////////// Step 3 //////////
