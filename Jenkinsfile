@@ -67,7 +67,7 @@ pipeline {
                 sh "docker run --detach --name ${ID} --rm --publish ${TEST_LOCAL_PORT}:80 ${id}"
 
                 script {
-                    host_ip = sh(returnStdout: true, script: '/sbin/ip route | awk \'/default/ { print $3 ":${TEST_LOCAL_PORT}" }\'')
+                    host_ip = sh("hostname -i")
                 }
 
             }
