@@ -66,9 +66,6 @@ pipeline {
                 echo "Starting ${IMAGE_REPO_NAME} container"
                 sh "docker run --detach --name ${ID} --rm --publish ${TEST_LOCAL_PORT}:80 ${id}"
 
-                script {
-                    host_ip = $(hostname -i)
-                }
 
             }
         }
@@ -78,7 +75,11 @@ pipeline {
             parallel {
                 stage('Curl http_code') {
                     steps {
-                        sh "curl -vG 'http://${host_ip}:80'"
+					    script {
+                    host_ip = sh("hostname -i")
+					sh "curl -vG 'http://${host_ip}:80'"
+                }
+                        
                     }
                 }
             }
