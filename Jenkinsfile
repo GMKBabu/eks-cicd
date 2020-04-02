@@ -75,10 +75,10 @@ pipeline {
             parallel {
                 stage('Curl') {
                     steps {
-					    script {
-                             host_ip = sh("hostname -i")
-					         sh "curl -vG 'http://192.168.13.241:80'"
-                        }
+					    sh '''
+						  host_ip=$(hostname -i)
+						  curl -aG http://$host_ip:80
+						'''
                         
                     }
              
