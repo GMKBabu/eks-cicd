@@ -50,7 +50,7 @@ pipeline {
         stage('Build Docker Image and Test') {
             steps {
                 echo "Building application and Docker image"
-                sh "docker build -t $ID  ${WORKSPACE}/Dockerfile"
+                sh "docker build -t $ID  ${WORKSPACE}/."
 
                 echo "Running Test"
 
