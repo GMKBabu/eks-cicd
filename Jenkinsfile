@@ -46,7 +46,6 @@ pipeline {
 	     }
         }
         }
-		/*
         ////////// Step 2 //////////
         stage('Build Docker Image and Test') {
             steps {
@@ -67,7 +66,7 @@ pipeline {
 
             }
         }
-        
+        /*
         // Run the 3 tests on the currently running ACME Docker container
         stage('Local tests') {
             parallel {
