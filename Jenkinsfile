@@ -155,7 +155,7 @@ pipeline {
             }
         }
     }
-
+/*
     post {
         success {
             echo "Successful build occured"
@@ -173,10 +173,14 @@ pipeline {
         }
 
     }
+    */
 }
 
+/*
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn ${TOPIC_ARN} \
     --message \"${currentBuild.result?:'SUCCESS'}\" --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --region "${AWS_DEFAULT_REGION}"'
 }
+*/
+
