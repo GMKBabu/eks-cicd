@@ -47,6 +47,7 @@ pipeline {
 	     }
         }
         }
+		/*
         ////////// Step 2 //////////
         stage('Build Docker Image and Test') {
             steps {
@@ -89,7 +90,7 @@ pipeline {
             }
         }
         ////////// Step 3 //////////
-		/*
+		
         stage("Publish Docker Image") {
             steps {
                 echo "Stop and remove container"
