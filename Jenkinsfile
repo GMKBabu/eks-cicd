@@ -80,7 +80,6 @@ pipeline {
                         
                 }
         }
-		/*
         ////////// Step 3 //////////
 		
         stage("Publish Docker Image") {
@@ -102,6 +101,5 @@ pipeline {
                 }
             }
         }
-		*/
     }
 }
