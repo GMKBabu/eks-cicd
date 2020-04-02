@@ -97,7 +97,7 @@ pipeline {
                     steps {
                         echo "Stop and remove container"
                         sh 'docker stop "${ID}"'
-                        echo 'logged user name is: "${BUILD_USER}"'
+                        echo 'logged user name is: ${BUILD_USER}'
                     }
                 }
                 stage('Login ECR Repository') {
@@ -178,7 +178,7 @@ pipeline {
 
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
-    --message \"${currentBuild.result?:'SUCCESS'}\" --subject \"Status: Job_Name: ${JOB_NAME}\" \
+    --message test-deploy --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --region \"${AWS_DEFAULT_REGION}\"'
 }
 
