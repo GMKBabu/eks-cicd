@@ -23,13 +23,14 @@ pipeline {
         GITHUB_URL = "https://github.com/GMKBabu/eks-cicd.git"
         GITHUB_CREDENTIALS_ID = "0b61464e-dd11-4760-b30a-f988490eb429"
         GITHUB_BRANCH_NAME = 'master'
-        //CUSTOM_TAG = "test"
+        CUSTOM_TAG = "$(date)"
         AWS_DEFAULT_REGION = 'us-east-1'
         AWS_ACCOUNT_ID = "504263020452"
         IMAGE_REPO_NAME = "eks"
         TEST_LOCAL_PORT = "80"
 		CUSTOM_BUILD_NUMBER = "DEV-PRD-${BUILD_NUMBER}"
 		ID = "${IMAGE_REPO_NAME}"
+		IMAGE_NAME = "${IMAGE_REPO_NAME}:${CUSTOM_TAG}"
     }
     triggers {
     //Run Polling of GitHub every minute everyday of the week
@@ -56,7 +57,7 @@ pipeline {
         stage('Build Docker Image and Test') {
             steps {
                 echo "Building application and Docker image"
-                sh "docker build -t $ID  ${WORKSPACE}/."
+                sh "docker build -t $IMAGE_NAME  ${WORKSPACE}/."
 
                 echo "Running Test"
 
@@ -64,7 +65,7 @@ pipeline {
                 sh "[ -z \"\$(docker ps -a | grep ${ID} 2>/dev/null)\" ] || docker rm -f ${ID}"
 
                 echo "Starting ${IMAGE_REPO_NAME} container"
-                sh "docker run --detach --name ${ID} --rm --publish ${TEST_LOCAL_PORT}:80 ${id}"
+                sh "docker run --detach --name ${ID} --rm --publish ${TEST_LOCAL_PORT}:80 ${IMAGE_NAME}"
 
 
             }
@@ -88,11 +89,11 @@ pipeline {
                 sh 'docker stop "${ID}"'
 				sh "echo login to ecr repository"
 				sh '(eval \$(aws ecr get-login  --no-include-email --region "${AWS_DEFAULT_REGION}"))'
-				sh 'echo Pushing "${ID}" image to registry'
+				sh 'echo Pushing "${IMAGE_NAME}" image to registry'
 				sh "echo change the docker image tag name"
-				sh 'docker tag "${ID}" "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${ID}"'
+				sh 'docker tag "${IMAGE_NAME}" "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}"'
                 sh "echo Pushing the Docker image...  "
-				sh 'docker push "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${ID}"'
+				sh 'docker push "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}"'
             }
         }
     }
