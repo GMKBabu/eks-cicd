@@ -30,7 +30,6 @@ pipeline {
         TEST_LOCAL_PORT = "80"
 		CUSTOM_BUILD_NUMBER = "DEV-PRD-${BUILD_NUMBER}"
 		ID = "${IMAGE_REPO_NAME}"
-		ECR_REPO_CREDENTIALS = 	"d7af17d1-b7d2-4bf5-9635-83ec6256a05e"
     }
     triggers {
     //Run Polling of GitHub every minute everyday of the week
@@ -88,7 +87,7 @@ pipeline {
                 sh "echo Stop and remove container"
                 sh 'docker stop "${ID}"'
 				sh "echo login to ecr repository"
-				sh '\$(aws ecr get-login  --no-include-email --region "${AWS_DEFAULT_REGION}")'
+				sh '(eval \$(aws ecr get-login  --no-include-email --region "${AWS_DEFAULT_REGION}"))'
 				sh 'echo Pushing "${ID}" image to registry'
 				sh "echo change the docker image tag name"
 				sh 'docker tag "${ID}" "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${ID}"'
