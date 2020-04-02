@@ -77,11 +77,11 @@ pipeline {
                     steps {
 					    script {
                              host_ip = sh("hostname -i")
-					         sh "curl -vG 'http://${host_ip}:80'"
+					         sh "curl -vG 'http://192.168.13.241:80'"
                         }
                         
                     }
-                }
+             
             }
         }
 		/*
