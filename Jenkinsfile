@@ -78,7 +78,7 @@ pipeline {
             parallel {
                 stage('Curl http_code') {
                     steps {
-                        sh "curl -vG 'http://${host_ip}:${http_code}'"
+                        sh "curl -vG 'http://${host_ip}:80'"
                     }
                 }
             }
