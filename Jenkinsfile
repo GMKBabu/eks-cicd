@@ -78,17 +78,7 @@ pipeline {
             parallel {
                 stage('Curl http_code') {
                     steps {
-                        curlRun ("http://${host_ip}", 'http_code')
-                    }
-                }
-                stage('Curl total_time') {
-                    steps {
-                        curlRun ("http://${host_ip}", 'total_time')
-                    }
-                }
-                stage('Curl size_download') {
-                    steps {
-                        curlRun ("http://${host_ip}", 'size_download')
+                        sh "curl -vG "http://${host_ip}:${TEST_LOCAL_PORT}"
                     }
                 }
             }
