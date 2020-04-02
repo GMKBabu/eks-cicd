@@ -73,12 +73,12 @@ pipeline {
         // Run the 3 tests on the currently running ACME Docker container
         stage('Local tests') {
             parallel {
-                stage('Curl http_code') {
+                stage('Curl') {
                     steps {
 					    script {
-                    host_ip = sh("hostname -i")
-					sh "curl -vG 'http://${host_ip}:80'"
-                }
+                             host_ip = sh("hostname -i")
+					         sh "curl -vG 'http://${host_ip}:80'"
+                        }
                         
                     }
                 }
