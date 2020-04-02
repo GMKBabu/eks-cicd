@@ -23,7 +23,7 @@ pipeline {
         GITHUB_URL = "https://github.com/GMKBabu/eks-cicd.git"
         GITHUB_CREDENTIALS_ID = "0b61464e-dd11-4760-b30a-f988490eb429"
         GITHUB_BRANCH_NAME = 'master'
-        CUSTOM_TAG = "$(date)"
+        CUSTOM_TAG = $(date)
         AWS_DEFAULT_REGION = 'us-east-1'
         AWS_ACCOUNT_ID = "504263020452"
         IMAGE_REPO_NAME = "eks"
