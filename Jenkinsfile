@@ -101,13 +101,13 @@ pipeline {
                 echo "Pushing ${ID} image to registry"
                 script {
                     echo "login to ecr repository"
-                    $(aws ecr get-login --no-include-email --region ${AWS_DEFAULT_REGION})
+                    sh "$(aws ecr get-login --no-include-email --region ${AWS_DEFAULT_REGION})"
                     
                     echo "change the docker image tag name"
-                    docker tag ${ID} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ID}
+                    sh "docker tag ${ID} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ID}"
 
                     echo "Pushing the Docker image...  "
-                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ID}
+                    sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ID}"
                 }
             }
         }
