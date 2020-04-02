@@ -43,7 +43,7 @@ pipeline {
 	       userRemoteConfigs: [[credentialsId: "${GITHUB_CREDENTIALS_ID}", url: "${GITHUB_URL}"]]])
 	   script {
 	       currentBuild.displayName = "${CUSTOM_BUILD_NUMBER}"
-            echo "Global ID set to ${ID}"
+            echo 'Global ID set to "${ID}"'
 	     }
         }
         }
