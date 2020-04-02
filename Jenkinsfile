@@ -20,7 +20,7 @@ pipeline {
 	agent any
 
     environment {
-        DEPLOY_PROD = "false"
+        DEPLOY_PROD = 'false'
         GITHUB_URL = "https://github.com/GMKBabu/eks-cicd.git"
         GITHUB_CREDENTIALS_ID = "0b61464e-dd11-4760-b30a-f988490eb429"
         GITHUB_BRANCH_NAME = 'master'
@@ -122,7 +122,7 @@ pipeline {
             when {
                 allOf {
                     environment name: 'DEPLOY_TO_PROD', value: 'false'
-                    //environment name: 'GITHUB_BRANCH_NAME', value: 'master'
+                    environment name: 'GITHUB_BRANCH_NAME', value: 'master'
                     
                 }
             }
