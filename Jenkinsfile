@@ -89,7 +89,7 @@ pipeline {
                 sh 'docker stop "${ID}"'
 				sh "echo login to ecr repository"
 				sh '(eval \$(aws ecr get-login  --no-include-email --region "${AWS_DEFAULT_REGION}"))'
-				docker.withRegistry('"${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com', 'ecr:"${AWS_DEFAULT_REGION}":"${ECR_REPO_CREDENTIALS}"') {
+				docker.withRegistry('https://"${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com', 'ecr:"${AWS_DEFAULT_REGION}":"${ECR_REPO_CREDENTIALS}"') {
 				    sh 'echo Pushing "${ID}" image to registry'
 				    sh "echo change the docker image tag name"
 				    sh 'docker tag "${ID}" "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${ID}"'
