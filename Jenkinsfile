@@ -20,6 +20,7 @@ pipeline {
 	agent any
 
     environment {
+        DEPLOY_PROD = "false"
         GITHUB_URL = "https://github.com/GMKBabu/eks-cicd.git"
         GITHUB_CREDENTIALS_ID = "0b61464e-dd11-4760-b30a-f988490eb429"
         GITHUB_BRANCH_NAME = 'master'
@@ -112,6 +113,44 @@ pipeline {
                         echo "Pushing the Docker image...  "
 				        sh 'docker push "${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}"'
                     }
+                }
+            }
+        }
+
+        // Waif for user manual approval, or proceed automatically if DEPLOY_TO_PROD is true
+        stage('Go for Production?') {
+            when {
+                allof {
+                    environment name: 'GITHUB_BRANCH_NAME', value: 'master'
+                    environment name: 'DEPLOY_TO_PROD', value: 'false'
+                }
+            }
+            steps {
+                // Prevent any older builds from deploying to production
+                milestone(1)
+                input "Proceed and deploy to Production?"
+                milestone(2)
+
+                script {
+                    DEPLOY_PROD = true
+                }
+            }
+        }
+
+        stage('Deploy to Production') {
+            when {
+                allof {
+                    expression { DEPLOY_PROD == true }
+                    environment name: 'DEPLOY_TO_PROD', value: 'true'
+                }
+            }
+            steps {
+                script {
+                    DEPLOY_PROD = true
+
+                    // Deploy with helm
+                    echo "Deploying"
+                    //helmInstall (namespace, "${ID}")   
                 }
             }
         }
