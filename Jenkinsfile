@@ -93,7 +93,7 @@ pipeline {
             parallel {
                 stage('stop docker container') {
                     steps {
-                        echo Stop and remove container"
+                        echo "Stop and remove container"
                         sh 'docker stop "${ID}"'
                     }
                 }
