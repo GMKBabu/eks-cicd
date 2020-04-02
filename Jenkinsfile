@@ -121,7 +121,7 @@ pipeline {
         stage('Go for Production?') {
             when {
                 allOf {
-                    environment name: 'GITHUB_BRANCH_NAME', value: 'master'
+                    //environment name: 'GITHUB_BRANCH_NAME', value: 'master'
                     environment name: 'DEPLOY_TO_PROD', value: 'false'
                 }
             }
