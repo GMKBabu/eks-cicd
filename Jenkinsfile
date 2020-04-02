@@ -11,9 +11,8 @@
 
 pipeline {
     // In this example, all is built and run from the master
-    options {
-        timeout(time: 60, unit: 'MINUTES')
-    }
+	agent any
+
     environment {
         GITHUB_URL = "https://github.com/GMKBabu/eks-cicd.git"
         GITHUB_CREDENTIALS_ID = "0b61464e-dd11-4760-b30a-f988490eb429"
@@ -23,6 +22,8 @@ pipeline {
         AWS_ACCOUNT_ID = "504263020452"
         IMAGE_REPO_NAME = "eks"
         TEST_LOCAL_PORT = "80"
+		CUSTOM_BUILD_NUMBER = "DEV-PRD-${BUILD_NUMBER}"
+		ID = "${IMAGE_REPO_NAME}:${CUSTOM_TAG}"
     }
     triggers {
     //Run Polling of GitHub every minute everyday of the week
@@ -30,26 +31,21 @@ pipeline {
         //cron ('0 0 * * 1-5')}
     // Pipeline stages
     }
-    agent any
+    options {
+	    buildDiscarder(logRotator(numToKeepStr: '5', artifactDaysToKeepStr: '3', artifactNumToKeepStr: '1'))
+        timeout(time: 60, unit: 'MINUTES')
+    }
     stages {
-        ////////// Step 1 //////////
-        stage('Git Code Checkout') {
-            steps {
-                echo "Check out gic code"
-                git branch: ${GITHUB_BRANCH_NAME},
-                        credentialsId: ${GITHUB_CREDENTIALS_ID},
-                        url: ${GITHUB_URL}
-                //// Validate kubectl
-                sh "kubectl cluster-info"
-
-
-
-                // Define a unique name for the tests container and helm release
-                script {
-                    ID = "${IMAGE_REPO_NAME}:${CUSTOM_TAG}"
-                    echo "Global ID set to ${ID}"
-                }
-            }
+             stage("GITHUB_code_checkout") {
+        steps {
+		   // using for checkout the code from github
+		 checkout([$class: 'GitSCM', branches: [[name: "*/${GITHUB_BRANCH_NAME}"]],doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], \
+	       userRemoteConfigs: [[credentialsId: "${GITHUB_CREDENTIALS_ID}", url: "${GITHUB_URL}"]]])
+	   script {
+	       currentBuild.displayName = "${CUSTOM_BUILD_NUMBER}"
+            echo "Global ID set to ${ID}"
+	     }
+        }
         }
         ////////// Step 2 //////////
         stage('Build Docker Image and Test') {
@@ -93,7 +89,7 @@ pipeline {
             }
         }
         ////////// Step 3 //////////
-        /*
+		/*
         stage("Publish Docker Image") {
             steps {
                 echo "Stop and remove container"
@@ -102,7 +98,8 @@ pipeline {
                 echo "Pushing ${ID} image to registry"
                 script {
                     echo "login to ecr repository"
-                    //sh "$(aws ecr get-login --no-include-email --region ${AWS_DEFAULT_REGION})"
+					
+                    $(aws ecr get-login --no-include-email --region ${AWS_DEFAULT_REGION})
                     
                     echo "change the docker image tag name"
                     docker tag ${ID} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ID}
@@ -112,6 +109,6 @@ pipeline {
                 }
             }
         }
-       */
+		*/
     }
 }
