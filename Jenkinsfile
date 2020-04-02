@@ -20,7 +20,7 @@ pipeline {
 	agent any
 
     environment {
-        DEPLOY_PROD = "false"
+        DEPLOY_PROD = false
         GITHUB_URL = "https://github.com/GMKBabu/eks-cicd.git"
         GITHUB_CREDENTIALS_ID = "0b61464e-dd11-4760-b30a-f988490eb429"
         GITHUB_BRANCH_NAME = 'master'
@@ -97,6 +97,7 @@ pipeline {
                     steps {
                         echo "Stop and remove container"
                         sh 'docker stop "${ID}"'
+                        echo 'logged user name is: "${BUILD_USER}"'
                     }
                 }
                 stage('Login ECR Repository') {
@@ -177,7 +178,7 @@ pipeline {
 
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
-    --message test-deploy --subject \"Status: Job_Name: ${JOB_NAME}\" \
+    --message \"${currentBuild.result?:'SUCCESS'}\" --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --region \"${AWS_DEFAULT_REGION}\"'
 }
 
