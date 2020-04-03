@@ -226,7 +226,7 @@ pipeline {
 
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
-    --message "test-deploy Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}\ --subject \"Status: Job_Name: ${JOB_NAME}\" \
+    --message "test-deploy Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER} --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --region \"${AWS_DEFAULT_REGION}\"'
 }
 
