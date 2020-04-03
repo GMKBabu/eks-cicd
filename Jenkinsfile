@@ -20,6 +20,7 @@ pipeline {
 	agent any
 
     environment {
+	    PATH = "/usr/local/bin/"
         DEPLOY_PROD = 'false'
         GITHUB_URL = "https://github.com/GMKBabu/eks-cicd.git"
         GITHUB_CREDENTIALS_ID = "0b61464e-dd11-4760-b30a-f988490eb429"
