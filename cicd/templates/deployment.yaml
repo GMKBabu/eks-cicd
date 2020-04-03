@@ -59,3 +59,5 @@ spec:
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+      imagePullSecrets:
+      - name: {{ .Values.imagePullSecrets }}

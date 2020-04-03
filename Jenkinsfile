@@ -147,6 +147,10 @@ pipeline {
             steps {
                 script {
                     DEPLOY_PROD = true
+					
+					sh "${WORKSPACE}/ecr-login.sh"
+
+
 
                     // Deploy with helm
                     echo "Deploying"

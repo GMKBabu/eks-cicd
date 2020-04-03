@@ -16,8 +16,8 @@ strategy:
   maxUnavailable: 0
 
 minReadySeconds: 1
-imagePullSecrets: []
-nameOverride: ""
+imagePullSecrets: us-east-1-ecr-registry
+ameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
