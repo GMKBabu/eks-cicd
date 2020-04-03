@@ -152,7 +152,7 @@ pipeline {
                     echo "Deploying"
 					sh """
 					    
-                        /usr/local/bin/helm upgrade --install --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" cicd
+                        /usr/local/bin/helm install cicd --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" "${WORKSPACE}"/cicd
                     """
 					sh "sleep 5"
                 }
