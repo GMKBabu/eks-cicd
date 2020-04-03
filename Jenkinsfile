@@ -172,8 +172,6 @@ pipeline {
                 stage('Test Helm list') {
                     steps {
                         echo "check helm list"
-                        echo "${COMMIT_MESSAGE}"
-                        echo "${COMMIT_ID}"
                         sh """
                         /usr/local/bin/helm list
 
@@ -194,7 +192,8 @@ pipeline {
                     steps {
                         script {
                             sh """
-                            host_url="${WORKSPACE}/ingess.sh"
+                            chmod 777 ${WORKSPACE}/ingess.sh
+                            host_url="./${WORKSPACE}/ingess.sh"
                             curl -aG http://host_url:80
 
                             """
@@ -226,7 +225,7 @@ pipeline {
 
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
-    --message "test-deploy Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER} --subject \"Status: Job_Name: ${JOB_NAME}\" \
+    --message "test-deploy Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}" --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --region \"${AWS_DEFAULT_REGION}\"'
 }
 
