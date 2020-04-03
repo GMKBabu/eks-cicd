@@ -193,7 +193,7 @@ pipeline {
                         script {
                             sh "chmod 777 ${WORKSPACE}/ingress.sh"
                             sh "${WORKSPACE}/ingress.sh"
-                            curl -aG http://host_url:80
+                            sh "curl -aG http://host_url:80"
                         }
                     }
                 }
