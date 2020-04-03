@@ -147,7 +147,7 @@ pipeline {
             steps {
                 script {
                     DEPLOY_PROD = true
-					
+					sh "chmod 777 ${WORKSPACE}/ecr-login.sh"
 					sh "${WORKSPACE}/ecr-login.sh"
 
 
