@@ -150,7 +150,11 @@ pipeline {
 
                     // Deploy with helm
                     echo "Deploying"
-                    //helmInstall (namespace, "${ID}")   
+                    sh """
+                        helm upgrade --install --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" cicd
+                        
+                        """
+                    sh "sleep 5"  
                 }
             }
         }

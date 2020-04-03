@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: "ingress"
+  annotations:
+  {{- include "cicd.ingressloadbalancer" . | nindent 4}}
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: {{ template "cicd.fullname" . }}
+              servicePort: {{ .Values.service.port }}

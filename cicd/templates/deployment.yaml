@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "cicd.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ template "cicd.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.strategy.maxSurge }}
+      maxUnavailable: {{ .Values.strategy.maxUnavailable }}
+    type: RollingUpdate
+  minReadySeconds: {{ .Values.minReadySeconds }}
+  selector:
+    matchLabels:
+      app: {{ template "cicd.name" . }}
+  template:
+    metadata:
+      labels:
+        name: {{ template "cicd.name" . }}
+        app: {{ template "cicd.name" . }}
+        tier: frontend
+        environment: prod
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: kubernetes.io/hostname
+            labelSelector:
+              matchLabels:
+                app: {{ template "cicd.name" . }}
+      containers:
+      - name: {{ template "cicd.name" . }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.containerPort.port }}
+        resources:
+        {{- toYaml .Values.resources | nindent 10 }}
+        env:
+        {{- toYaml .Values.env | nindent 10 }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
