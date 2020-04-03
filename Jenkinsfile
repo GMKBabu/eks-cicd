@@ -192,8 +192,8 @@ pipeline {
                     steps {
                         script {
                             sh """
-                            chmod 777 ${WORKSPACE}/ingess.sh
-                            host_url="./${WORKSPACE}/ingess.sh"
+                            chmod 777 ${WORKSPACE}/ingress.sh
+                            host_url="${WORKSPACE}/ingress.sh"
                             curl -aG http://host_url:80
 
                             """
@@ -225,7 +225,7 @@ pipeline {
 
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
-    --message "test-deploy Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}" --subject \"Status: Job_Name: ${JOB_NAME}\" \
+    --message "Current_Build_Statue: ${currentBuild.result}\n Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}\n Commit_Id: ${COMMIT_ID}\n Commit_Message: ${COMMIT_MESSAGE}" --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --region \"${AWS_DEFAULT_REGION}\"'
 }
 
