@@ -154,7 +154,7 @@ pipeline {
                         //helm upgrade --install --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" cicd
 
                 }
-			 dir(/usr/local/bin/) {
+			 dir("/usr/local/bin/") {
 				sh 'helm upgrade --install --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" cicd'
               }
 			}
