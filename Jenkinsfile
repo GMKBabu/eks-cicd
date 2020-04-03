@@ -20,7 +20,6 @@ pipeline {
 	agent any
 
     environment {
-	    PATH = "/usr/local/bin/"
         DEPLOY_PROD = 'false'
         GITHUB_URL = "https://github.com/GMKBabu/eks-cicd.git"
         GITHUB_CREDENTIALS_ID = "0b61464e-dd11-4760-b30a-f988490eb429"
@@ -151,13 +150,15 @@ pipeline {
 
                     // Deploy with helm
                     echo "Deploying"
-                    sh """
-                        helm upgrade --install --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" cicd
-                        
-                        """
-                    sh "sleep 5"  
+					    
+                        //helm upgrade --install --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" cicd
+
                 }
-            }
+			 dir(/usr/local/bin/) {
+				sh 'helm upgrade --install --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" cicd'
+              }
+			}
+			
         }
     }
 
