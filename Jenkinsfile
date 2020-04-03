@@ -172,11 +172,22 @@ pipeline {
                 stage('Test Helm list') {
                     steps {
                         echo "check helm list"
+                        echo "${COMMIT_MESSAGE}"
+                        echo "${COMMIT_ID}"
                         sh """
                         /usr/local/bin/helm list
 
                         """
                         sh "sleep 5"
+                    }
+                }
+                stage('Test Deployment') {
+                    steps{
+                        script {
+                            sh """
+                                /root/bin/kubectl get ingress,nodes,deployment,svc,pods -n babu -o wide 
+                            """
+                        }
                     }
                 }
                 stage("Check Ingress Url") {
@@ -190,7 +201,6 @@ pipeline {
                         }
                     }
                 }
-                
             }
         }
     }
@@ -216,7 +226,7 @@ pipeline {
 
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
-    --message "test-deploy Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}\N --subject \"Status: Job_Name: ${JOB_NAME}\" \
+    --message "test-deploy Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}\ --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --region \"${AWS_DEFAULT_REGION}\"'
 }
 
