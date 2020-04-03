@@ -33,7 +33,7 @@ spec:
                 app: {{ template "cicd.name" . }}
       containers:
       - name: {{ template "cicd.name" . }}
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        image: {{ .Values.image.repository }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.containerPort.port }}
