@@ -150,13 +150,12 @@ pipeline {
 
                     // Deploy with helm
                     echo "Deploying"
+					sh """
 					    
-                        //helm upgrade --install --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" cicd
-
+                        /usr/local/bin/helm upgrade --install --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" cicd
+                    """
+					sh "sleep 5"
                 }
-			 dir("/usr/local/bin/") {
-				sh 'helm upgrade --install --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" cicd'
-              }
 			}
 			
         }
