@@ -147,21 +147,51 @@ pipeline {
             steps {
                 script {
                     DEPLOY_PROD = true
+					
+					echo "generate imagePullSecrets"
 					sh "chmod 777 ${WORKSPACE}/ecr-login.sh"
 					sh "${WORKSPACE}/ecr-login.sh"
-
-
 
                     // Deploy with helm
                     echo "Deploying"
 					sh """
 					    
-                        /usr/local/bin/helm install cicd --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" "${WORKSPACE}"/cicd
+                        /usr/local/bin/helm upgrade --install cicd --set image.repository="${AWS_ACCOUNT_ID}".dkr.ecr."${AWS_DEFAULT_REGION}".amazonaws.com/"${IMAGE_NAME}" "${WORKSPACE}"/cicd
                     """
 					sh "sleep 5"
                 }
 			}
 			
+        }
+
+        stage("Production tests") {
+            when {
+                expression { DEPLOY_PROD == true }
+            }
+            parallel {
+                stage('Test Helm list') {
+                    steps {
+                        echo "check helm list"
+                        sh """
+                        /usr/local/bin/helm list
+
+                        """
+                        sh "sleep 5"
+                    }
+                }
+                stage("Check Ingress Url") {
+                    steps {
+                        script {
+                            sh """
+                            host_url=$(/root/bin/kubectl get ingress -n babu |grep ingress | awk '{print $3}')
+                            curl -aG http://host_url:80
+
+                            """
+                        }
+                    }
+                }
+                
+            }
         }
     }
 
@@ -186,7 +216,7 @@ pipeline {
 
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
-    --message test-deploy --subject \"Status: Job_Name: ${JOB_NAME}\" \
+    --message "test-deploy Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}\N --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --region \"${AWS_DEFAULT_REGION}\"'
 }
 
