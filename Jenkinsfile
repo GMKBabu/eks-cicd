@@ -191,12 +191,9 @@ pipeline {
                 stage("Check Ingress Url") {
                     steps {
                         script {
-                            sh """
-                            host_url="(/root/bin/kubectl get ingress -n babu |grep ingress | awk '{print ($3)}')"
-
+                            sh "chmod 777 ${WORKSPACE}/ingress.sh"
+                            sh "${WORKSPACE}/ingress.sh"
                             curl -aG http://host_url:80
-
-                            """
                         }
                     }
                 }
