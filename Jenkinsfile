@@ -194,7 +194,7 @@ pipeline {
                     steps {
                         script {
                             sh """
-                            host_url=$(/root/bin/kubectl get ingress -n babu |grep ingress | awk '{print "\$3"}')
+                            host_url=$(/root/bin/kubectl get ingress -n babu |grep ingress | awk '{print "$3"}')
                             curl -aG http://host_url:80
 
                             """
