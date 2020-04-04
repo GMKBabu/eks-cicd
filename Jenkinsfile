@@ -230,8 +230,8 @@ pipeline {
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
     --region \"${AWS_DEFAULT_REGION}"\
-    --subject \"Status: Job_Name: ${JOB_NAME}\" \
-    --message "<table><tr><td>Job_Name:</td> <td>${JOB_NAME}</td></tr><tr><td>Build_Number:</td><td>${BUILD_NUMBER}</td></tr><tr><td>Build_URL:</td><td>${BUILD_URL}</td></tr></table>"'
+    --subject \"Status: ${currentBuild.result}" \
+    --message "<table>Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}\n Build_URL: ${BUILD_URL}" '
 }
 
 
