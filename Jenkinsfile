@@ -229,27 +229,9 @@ pipeline {
 
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
-    --region \"${AWS_DEFAULT_REGION}\"\
+    --region \"${AWS_DEFAULT_REGION}"\
     --subject \"Status: Job_Name: ${JOB_NAME}\" \
-    --message "<table border=2 cellspacing=2 cellpadding=2 width="40%">
-               <tr>
-               <td align="left" width="30%">
-               </td>
-               <td valign="center" width="70%">
-               <b style="font-size: 170%;">OSE RESOURCE USAGE INFORMATION</b>
-               </td>
-               </tr>
-               <tr>
-               <td>URL:</td>
-               <td>
-               <a href='${BUILD_URL}'>${JOB_NAME}</a>
-               </td>
-               </tr>
-               <tr>
-               <td>DATE/TIME:</td>
-               <td>${BUILD_TIMESTAMP}</td>
-               </tr>
-               </table>"'
+    --message "<table><tr><td>Job_Name:</td> <td>${JOB_NAME}</td></tr><tr><td>Build_Number:</td><td>${BUILD_NUMBER}</td></tr><tr><td>Build_URL:</td><td>${BUILD_URL}</td></tr></table>"'
 }
 
 
