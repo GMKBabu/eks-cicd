@@ -192,7 +192,7 @@ pipeline {
                 stage("Check Ingress Url") {
                     steps {
                         script {
-                            echo "tesing ${currentBuild.result}"
+                            echo "tesing"
                             /*
                             sh """
                              #!/bin/bash
@@ -211,6 +211,7 @@ pipeline {
         success {
             echo "Successful build occured"
             script {
+                echo "tesing ${currentBuild.result}"
                 currentBuild.result = "SUCCESS"
             }
             NotifyEmail()
