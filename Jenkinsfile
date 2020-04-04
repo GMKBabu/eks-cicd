@@ -191,9 +191,11 @@ pipeline {
                 stage("Check Ingress Url") {
                     steps {
                         script {
-                            sh "chmod 777 ${WORKSPACE}/ingress.sh"
-                            sh "${WORKSPACE}/ingress.sh"
-                            sh "curl -aG http://host_url:80"
+                            sh """
+                             #!/bin/bash
+                             host_url=$(/root/bin/kubectl get ingress -n babu |grep ingress | awk '{print $3}')
+                            curl -aG http://host_url:80
+                            """
                         }
                     }
                 }
@@ -222,7 +224,7 @@ pipeline {
 
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
-    --message "Current_Build_Statue: ${currentBuild.result}\n Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}" --subject \"Status: Job_Name: ${JOB_NAME}\" \
+    --message "tttt Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}" --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --region \"${AWS_DEFAULT_REGION}\"'
 }
 
