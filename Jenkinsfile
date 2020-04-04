@@ -236,7 +236,7 @@ def NotifyEmail() {
 */
 def NotifyEmail() {
   emailext (
-  to: "babu.g3090@gmail.com",
+  to: "babu.g0730@gmail.com",
   subject: "'${BUILD_NUMBER}!'",
   attachLog: true,
   body: """<style>
