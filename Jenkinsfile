@@ -266,8 +266,8 @@ def NotifyEmail() {
   </td>
   </tr>
   <tr>
-  <td>DATE/TIME:</td>
-  <td>${BUILD_TIMESTAMP}</td>
+  <td>JobName:</td>
+  <td>${JOB_NAME}</td>
   </tr>
   </table>
   <br />
