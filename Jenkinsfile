@@ -20,10 +20,8 @@ pipeline {
 	agent any
 
     environment {
-        DEPLOY_PROD = 'false'
         GITHUB_URL = "https://github.com/GMKBabu/eks-cicd.git"
         GITHUB_CREDENTIALS_ID = "0b61464e-dd11-4760-b30a-f988490eb429"
-        GITHUB_BRANCH_NAME = 'master'
         CUSTOM_TAG = "${BUILD_NUMBER}"
         AWS_DEFAULT_REGION = 'us-east-1'
         AWS_ACCOUNT_ID = "504263020452"
@@ -33,6 +31,10 @@ pipeline {
 		ID = "${IMAGE_REPO_NAME}"
 		IMAGE_NAME = "${IMAGE_REPO_NAME}:${CUSTOM_TAG}"
         TOPIC_ARN = "arn:aws:sns:us-east-1:504263020452:config-topic"
+    }
+    parameters {
+        string (name: 'GITHUB_BRANCH_NAME', defaultValue: 'master', description: 'Git branch to build')
+        booleanParam (name: 'DEPLOY_TO_PROD', defaultValue: false, description: 'If build and tests are good, proceed and deploy to production without manual approval')
     }
     triggers {
     //Run Polling of GitHub every minute everyday of the week
@@ -121,16 +123,15 @@ pipeline {
         stage('Go for Production?') {
             when {
                 allOf {
-                    //environment name: 'DEPLOY_TO_PROD', value: 'false'
                     environment name: 'GITHUB_BRANCH_NAME', value: 'master'
-                    
+                    environment name: 'DEPLOY_TO_PROD', value: 'false'
                 }
             }
             steps {
                 // Prevent any older builds from deploying to production
-               // milestone(1)
+               milestone(1)
                 input("Proceed and deploy to Production?")
-               // milestone(2)
+               milestone(2)
                 script {
                     DEPLOY_PROD = true
                 }
