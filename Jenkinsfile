@@ -230,8 +230,8 @@ pipeline {
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
     --region \"${AWS_DEFAULT_REGION}"\
-    --subject \"Status: ${currentBuild.result}" \
-    --message "<table>Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}\n Build_URL: ${BUILD_URL}" '
+    --subject \"Status: Job_Name: ${JOB_NAME}\" \
+    --message "/root/bin/kubectl get ingress,nodes,deployment,svc,pods -n babu -o wide \nJob_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}\n Build_URL: ${BUILD_URL}"'
 }
 
 
