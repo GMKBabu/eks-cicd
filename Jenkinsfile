@@ -229,7 +229,7 @@ pipeline {
 
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
-    --region \"${AWS_DEFAULT_REGION}\"
+    --region \"${AWS_DEFAULT_REGION}"\
     --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --message """<style>
   body, table, td, th, p {
