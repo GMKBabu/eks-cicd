@@ -31,7 +31,6 @@ pipeline {
 		ID = "${IMAGE_REPO_NAME}"
 		IMAGE_NAME = "${IMAGE_REPO_NAME}:${CUSTOM_TAG}"
         TOPIC_ARN = "arn:aws:sns:us-east-1:504263020452:config-topic"
-        BUILD_STATUS = "${currentBuild.result}"
     }
     parameters {
         string (name: 'GITHUB_BRANCH_NAME', defaultValue: 'master', description: 'Git branch to build')
@@ -229,10 +228,8 @@ pipeline {
 }
 
 def NotifyEmail() {
-    STATUS="${BUILD_STATUS}"
-    echo "${STATUS}"
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
-    --message "Result: ${STATUS}\n Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}" --subject \"Status: Job_Name: ${JOB_NAME}\" \
+    --message "Result: echo ${currentBuild.result}\n Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}" --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --region \"${AWS_DEFAULT_REGION}\"'
 }
 
