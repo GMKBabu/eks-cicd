@@ -192,7 +192,7 @@ pipeline {
                 stage("Check Ingress Url") {
                     steps {
                         script {
-                            echo "tesing"
+                            echo "tesing ${currentBuild.result}"
                             /*
                             sh """
                              #!/bin/bash
@@ -228,7 +228,7 @@ pipeline {
 
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
-    --message "tttt Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}" --subject \"Status: Job_Name: ${JOB_NAME}\" \
+    --message " Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}" --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --region \"${AWS_DEFAULT_REGION}\"'
 }
 
