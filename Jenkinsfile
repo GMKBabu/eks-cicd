@@ -231,7 +231,8 @@ def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
     --region \"${AWS_DEFAULT_REGION}"\
     --subject \"Status: Job_Name: ${JOB_NAME}\" \
-    --message """<style>
+    --message '''
+<style>
   body, table, td, th, p {
     font-family:verdana,helvetica,sans serif;
     font-size:11px;
@@ -263,7 +264,7 @@ def NotifyEmail() {
   </tr>
   </table>
   <br />
-  </body>"""'
+  </body>''''
 }
 
 
