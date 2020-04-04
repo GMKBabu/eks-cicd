@@ -26,6 +26,7 @@ pipeline {
         AWS_DEFAULT_REGION = 'us-east-1'
         AWS_ACCOUNT_ID = "504263020452"
         IMAGE_REPO_NAME = "eks"
+        GITHUB_BRANCH_NAME = 'master'
         TEST_LOCAL_PORT = "80"
 		CUSTOM_BUILD_NUMBER = "DEV-PRD-${BUILD_NUMBER}"
 		ID = "${IMAGE_REPO_NAME}"
@@ -33,7 +34,6 @@ pipeline {
         TOPIC_ARN = "arn:aws:sns:us-east-1:504263020452:config-topic"
     }
     parameters {
-        string (name: 'GITHUB_BRANCH_NAME', defaultValue: 'master', description: 'Git branch to build')
         booleanParam (name: 'DEPLOY_TO_PROD', defaultValue: false, description: 'If build and tests are good, proceed and deploy to production without manual approval')
     }
     triggers {
