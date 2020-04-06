@@ -236,7 +236,7 @@ def NotifyEmail() {
 */
 def NotifyEmail() {
         emailext (
-            to: "babu.m@connectio.co.in",
+            to: "babu.g0730@gmail.com",
             subject: "'${BUILD_NUMBER}!'",
             attachLog: true,
             body: """<style>
@@ -252,7 +252,8 @@ def NotifyEmail() {
                     <table border=2 cellspacing=2 cellpadding=2 width="40%">
                           <tr>
                               <td align="left" width="40%">
-                                 <img src="'${WORKSPACE}'/GMKBabu.png" />
+                                <b style="font-size: 170%;">GMKBabu</b>
+                                 //<img src="'${WORKSPACE}'/GMKBabu.png" />
                               </td>
                               <td valign="center" width="60%">
                                  <b style="font-size: 150%;">CICD Pipeline Information</b>
