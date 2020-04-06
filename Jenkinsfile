@@ -252,10 +252,10 @@ def NotifyEmail() {
                     <table border=2 cellspacing=2 cellpadding=2 width="40%">
                           <tr>
                               <td align="left" width="30%">
-                                 <img src="*****/headshot.png" />
+                                 <img src="'${WORKSPACE}'/GMKBabu.png" />
                               </td>
                               <td valign="center" width="70%">
-                                 <b style="font-size: 170%;">OSE RESOURCE USAGE INFORMATION</b>
+                                 <b style="font-size: 170%;">CICD Pipeline Information</b>
                               </td>
                             </tr>
                             <tr>
