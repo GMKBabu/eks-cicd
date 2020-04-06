@@ -211,7 +211,6 @@ pipeline {
         success {
             echo "Successful build occured"
             script {
-                echo "tesing ${currentBuild.result}"
                 currentBuild.result = "SUCCESS"
             }
             NotifyEmail()
@@ -235,43 +234,46 @@ def NotifyEmail() {
 }
 */
 def NotifyEmail() {
-  emailext (
-  to: "babu.g0730@gmail.com",
-  subject: "'${BUILD_NUMBER}!'",
-  attachLog: true,
-  body: """<style>
-  body, table, td, th, p {
-    font-family:verdana,helvetica,sans serif;
-    font-size:11px;
-    color:black;
-  }
-  td.bg1 { color:white; background-color:#595959; font-size:120% }
-  td.console { font-family:courier new, lucida console; }
-  </style>
-  <body>
-  <table border=2 cellspacing=2 cellpadding=2 width="40%">
-  <tr>
-  <td align="left" width="30%">
-  <img
-  src="*****/headshot.png" />
-  </td>
-  <td valign="center" width="70%">
-  <b style="font-size: 170%;">OSE RESOURCE USAGE INFORMATION</b>
-  </td>
-  </tr>
-  <tr>
-  <td>URL:</td>
-  <td>
-  <a href='${BUILD_URL}'>${JOB_NAME}</a>
-  </td>
-  </tr>
-  <tr>
-  <td>JobName:</td>
-  <td>${JOB_NAME}</td>
-  </tr>
-  </table>
-  <br />
-  </body>"""
-  )
+    emailext (
+        to: "babu.g0730@gmail.com",
+        subject: "'${BUILD_NUMBER}!'",
+        attachLog: true,
+        body: """<style>
+            body, table, td, th, p {
+                font-family:verdana,helvetica,sans serif;
+                font-size:11px;
+                color:black;
+                }
+                td.bg1 { color:white; background-color:#595959; font-size:120% }
+                td.console { font-family:courier new, lucida console; }
+                </style>
+                <body>
+            <table border=2 cellspacing=2 cellpadding=2 width="40%">
+            <tr>
+               <td align="left" width="30%">
+               <img src="*****/headshot.png" />
+                </td>
+                <td valign="center" width="70%">
+                <b style="font-size: 170%;">OSE RESOURCE USAGE INFORMATION</b>
+                </td>
+            </tr>
+            <tr>
+                <td>URL:</td>
+                <td>
+                <a href='${BUILD_URL}'>${JOB_NAME}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Status:</td>
+                <td>${currentBuild.result}</td>
+            </tr>
+            <tr>
+                <td>JobName:</td>
+                <td>${JOB_NAME}</td>
+            </tr>
+            </table>
+        <br />
+        </body>"""
+       )
 }
 
