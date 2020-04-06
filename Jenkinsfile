@@ -264,10 +264,6 @@ def NotifyEmail() {
                 </td>
             </tr>
             <tr>
-                <td>Status:</td>
-                <td>${currentBuild.result}</td>
-            </tr>
-            <tr>
                 <td>JobName:</td>
                 <td>${JOB_NAME}</td>
             </tr>
