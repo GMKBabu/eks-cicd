@@ -274,23 +274,23 @@ def NotifyEmail() {
                             </tr>
                             <tr>
                                 <td>Nodes:</td>
-                                <td>$NODES</td>
+                                <td>${NODES}</td>
                             </tr>
                             <tr>
                                 <td>Deployments:</td>
-                                <td>$DEPLOYMNETS</td>
+                                <td>${DEPLOYMNETS}</td>
                             </tr>
                             <tr>
                                 <td>Deploy_Image:</td>
-                                <td>$IMAGE</td>
+                                <td>${IMAGE}</td>
                             </tr>
                             <tr>
                                 <td>Pods:</td>
-                                <td>$PODS</td>
+                                <td>${PODS}</td>
                             </tr>
                             <tr>
                                 <td>Pods_ips:</td>
-                                <td>$PODS_IPS</td>
+                                <td>${PODS_IPS}</td>
                             </tr>
                     </table>
                     <br />
