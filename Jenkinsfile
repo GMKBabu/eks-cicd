@@ -184,18 +184,18 @@ pipeline {
                         """
                         sh "sleep 5"
                     }
-                }/*
+                }
                 stage('Test Deployment') {
                     steps{
                         sh '''
-                            NODES=$(/root/bin/kubectl get nodes -n babu -o wide | grep -i Ready | wc -l)
-                            dEPLOYMENT=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $2,$4,$5}')
-                            IMAGE=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $7}')
-                            PODS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | wc -l)
-                            PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}') 
+                            env.NODES=$(/root/bin/kubectl get nodes -n babu -o wide | grep -i Ready | wc -l)
+                            env.dEPLOYMENT=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $2,$4,$5}')
+                            env.IMAGE=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $7}')
+                            env.PODS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | wc -l)
+                            env.PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}') 
                         '''
                     }
-                }*/
+                }
                 stage("Check Ingress Url") {
                     steps {
 			            sh '''
@@ -237,14 +237,6 @@ def NotifyEmail() {
 replace gmkbabu to <img src="'${WORKSPACE}'/GMKBabu.png" />
 */
 def NotifyEmail() {
-        sh '''
-            NODES=$(/root/bin/kubectl get nodes -n babu -o wide | grep -i Ready | wc -l)
-            dEPLOYMENT=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $2,$4,$5}')
-            IMAGE=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $7}')
-            PODS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | wc -l)
-            PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}') 
-           '''
-           echo "$NODES"
         emailext (
             to: "babu.g0730@gmail.com",
             subject: "Status: '${currentBuild.result}'",
@@ -282,23 +274,23 @@ def NotifyEmail() {
                             </tr>
                             <tr>
                                 <td>Nodes:</td>
-                                <td>$NODES</td>
+                                <td>${env.NODES}</td>
                             </tr>
                             <tr>
                                 <td>Deployments:</td>
-                                <td>$DEPLOYMNETS</td>
+                                <td>${env.DEPLOYMNETS}</td>
                             </tr>
                             <tr>
                                 <td>Deploy_Image:</td>
-                                <td>$IMAGE</td>
+                                <td>${env.IMAGE}</td>
                             </tr>
                             <tr>
                                 <td>Pods:</td>
-                                <td>$PODS</td>
+                                <td>${env.PODS}</td>
                             </tr>
                             <tr>
                                 <td>Pods_ips:</td>
-                                <td>$PODS_IPS</td>
+                                <td>${env.PODS_IPS}</td>
                             </tr>
                     </table>
                     <br />
