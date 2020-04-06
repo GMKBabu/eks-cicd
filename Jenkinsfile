@@ -188,11 +188,11 @@ pipeline {
                 stage('Test Deployment') {
                     steps{
                         sh '''
-                            env.NODES=$(/root/bin/kubectl get nodes -n babu -o wide | grep -i Ready | wc -l)
-                            env.dEPLOYMENT=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $2,$4,$5}')
-                            env.IMAGE=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $7}')
-                            env.PODS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | wc -l)
-                            env.PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}') 
+                            NODES=$(/root/bin/kubectl get nodes -n babu -o wide | grep -i Ready | wc -l)
+                            dEPLOYMENT=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $2,$4,$5}')
+                            IMAGE=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $7}')
+                            PODS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | wc -l)
+                            PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}') 
                         '''
                     }
                 }
