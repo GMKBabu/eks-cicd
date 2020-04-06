@@ -31,6 +31,11 @@ pipeline {
 		ID = "${IMAGE_REPO_NAME}"
 		IMAGE_NAME = "${IMAGE_REPO_NAME}:${CUSTOM_TAG}"
         TOPIC_ARN = "arn:aws:sns:us-east-1:504263020452:config-topic"
+        NODES=""
+        dEPLOYMENT=""
+        IMAGE=""
+        PODS=""
+        PODS_IPS="" 
     }
     parameters {
         string (name: 'GITHUB_BRANCH_NAME', defaultValue: 'master', description: 'Git branch to build')
