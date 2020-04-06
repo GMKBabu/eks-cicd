@@ -184,7 +184,11 @@ pipeline {
                     steps{
                         script {
                             sh """
-                                /root/bin/kubectl get ingress,nodes,deployment,svc,pods -n babu -o wide 
+                                NODES=$(/root/bin/kubectl get nodes -n babu -o wide | grep -i Ready | wc -l)
+                                dEPLOYMENT=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $2,$4,$5}')
+                                IMAGE=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $7}')
+                                PODS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | wc -l)
+                                PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}') 
                             """
                         }
                     }
@@ -264,6 +268,26 @@ def NotifyEmail() {
                             <tr>
                                 <td>JobName:</td>
                                 <td>${JOB_NAME}</td>
+                            </tr>
+                            <tr>
+                                <td>Nodes:</td>
+                                <td>${NODES}</td>
+                            </tr>
+                            <tr>
+                                <td>Deployments:</td>
+                                <td>${DEPLOYMNETS}</td>
+                            </tr>
+                            <tr>
+                                <td>Deploy_Image:</td>
+                                <td>${IMAGE}</td>
+                            </tr>
+                            <tr>
+                                <td>Pods:</td>
+                                <td>${PODS}</td>
+                            </tr>
+                            <tr>
+                                <td>Pods_ips:</td>
+                                <td>${PODS_IPS}</td>
                             </tr>
                     </table>
                     <br />
