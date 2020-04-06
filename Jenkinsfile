@@ -237,7 +237,6 @@ def NotifyEmail() {
 replace gmkbabu to <img src="'${WORKSPACE}'/GMKBabu.png" />
 */
 def NotifyEmail() {
-       echo " for email testing ${env.NODES}"
         emailext (
             to: "babu.g0730@gmail.com",
             subject: "Status: '${currentBuild.result}'",
