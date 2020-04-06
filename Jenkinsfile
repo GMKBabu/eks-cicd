@@ -244,6 +244,7 @@ def NotifyEmail() {
             PODS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | wc -l)
             PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}') 
            '''
+           echo "$NODES"
         emailext (
             to: "babu.g0730@gmail.com",
             subject: "Status: '${currentBuild.result}'",
