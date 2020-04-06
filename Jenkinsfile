@@ -191,14 +191,10 @@ pipeline {
                 }
                 stage("Check Ingress Url") {
                     steps {
-                        script {
-                            echo "tesing"
-                            sh """
-                             #!/bin/bash
-                             host_url=$(/root/bin/kubectl get ingress -n babu |grep ingress | awk \'{print $3}\')
-                            curl -aG http://host_url:80
-                            """
-                        }
+			            sh '''
+				            host_url=$(/root/bin/kubectl get ingress -n babu |grep ingress | awk '{print $3}')
+				            curl -aG http://$host_url:80
+         				'''
                     }
                 }
             }
