@@ -235,7 +235,6 @@ def NotifyEmail() {
 }
 */
 def NotifyEmail() {
-    always {
         emailext (
             to: "babu.g0730@gmail.com",
             subject: "'${BUILD_NUMBER}!'",
@@ -275,7 +274,5 @@ def NotifyEmail() {
                     <br />
                   </body>"""
                 )
-            
-    }
 }
 
