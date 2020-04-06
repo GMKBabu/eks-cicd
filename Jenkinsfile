@@ -233,11 +233,12 @@ def NotifyEmail() {
     --subject \"Status: Job_Name: ${JOB_NAME}\" \
     --message "Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}\n Build_URL: ${BUILD_URL}"'
 }
+replace gmkbabu to <img src="'${WORKSPACE}'/GMKBabu.png" />
 */
 def NotifyEmail() {
         emailext (
             to: "babu.g0730@gmail.com",
-            subject: "'${BUILD_NUMBER}!'",
+            subject: "Status: '${currentBuild.result}'",
             attachLog: true,
             body: """<style>
                        body, table, td, th, p {
@@ -253,7 +254,6 @@ def NotifyEmail() {
                           <tr>
                               <td align="left" width="40%">
                                 <b style="font-size: 170%;">GMKBabu</b>
-                                 //<img src="'${WORKSPACE}'/GMKBabu.png" />
                               </td>
                               <td valign="center" width="60%">
                                  <b style="font-size: 150%;">CICD Pipeline Information</b>
@@ -264,8 +264,8 @@ def NotifyEmail() {
                                 <td><a href='${BUILD_URL}'>${JOB_NAME}</a></td>
                             </tr>
                             <tr>
-                                <td>Status:</td>
-                                <td>${currentBuild.result}</td>
+                                <td>BuildNumber:</td>
+                                <td>${CUSTOM_BUILD_NUMBER}</td>
                             </tr>
                             <tr>
                                 <td>JobName:</td>
