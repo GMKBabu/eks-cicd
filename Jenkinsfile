@@ -184,7 +184,7 @@ pipeline {
                         """
                         sh "sleep 5"
                     }
-                }
+                }/*
                 stage('Test Deployment') {
                     steps{
                         sh '''
@@ -195,7 +195,7 @@ pipeline {
                             PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}') 
                         '''
                     }
-                }
+                }*/
                 stage("Check Ingress Url") {
                     steps {
 			            sh '''
@@ -237,6 +237,14 @@ def NotifyEmail() {
 replace gmkbabu to <img src="'${WORKSPACE}'/GMKBabu.png" />
 */
 def NotifyEmail() {
+             sh '''
+                NODES=$(/root/bin/kubectl get nodes -n babu -o wide | grep -i Ready | wc -l)
+                dEPLOYMENT=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $2,$4,$5}')
+                IMAGE=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $7}')
+                PODS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | wc -l)
+                PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}') 
+                echo "test ${env.NODES}"
+              '''
         emailext (
             to: "babu.g0730@gmail.com",
             subject: "Status: '${currentBuild.result}'",
