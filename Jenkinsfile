@@ -183,7 +183,7 @@ pipeline {
                 stage('Test Deployment') {
                     steps{
                         sh '''
-                            NODES=$(/root/bin/kubectl get nodes -n babu -o wide | grep -i Ready | wc -l)
+
                             dEPLOYMENT=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $2,$4,$5}')
                             IMAGE=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $7}')
                             PODS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | wc -l)
@@ -223,6 +223,10 @@ pipeline {
     }
 }
 def NotifyEmail() {
+    sh '''
+    NODES=$(/root/bin/kubectl get nodes -n babu -o wide | grep -i Ready | wc -l)
+    '''
+    echo "NO of nodes: $NODES"
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
     --region \"${AWS_DEFAULT_REGION}"\
     --subject \"Status: Job_Name: ${JOB_NAME}\" \
