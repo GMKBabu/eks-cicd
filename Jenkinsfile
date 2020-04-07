@@ -180,17 +180,6 @@ pipeline {
                         sh "sleep 5"
                     }
                 }
-                stage('Test Deployment') {
-                    steps{
-                        sh '''
-
-                            dEPLOYMENT=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $2,$4,$5}')
-                            IMAGE=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $7}')
-                            PODS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | wc -l)
-                            PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}') 
-                        '''
-                    }
-                }
                 stage("Check Ingress Url") {
                     steps {
 			            sh '''
@@ -224,11 +213,17 @@ pipeline {
 }
 def NotifyEmail() {
     sh '''
+    DEPLOYMENT=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $2,$4,$5}')
+    IMAGE=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $7}')
+    INGRESS_URL=$(/root/bin/kubectl get ingress -n babu |grep ingress | awk '{print $3}')
     NODES=$(/root/bin/kubectl get nodes -n babu -o wide | grep -i Ready | wc -l)
+    PODS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | wc -l)
+    PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}')
+
     aws sns publish --topic-arn \"${TOPIC_ARN}\" \
     --region \"${AWS_DEFAULT_REGION}"\
     --subject \"Status: Job_Name: ${JOB_NAME}\" \
-    --message "Job_Name: ${JOB_NAME}\n Nodes: $NODES\n Build_Number: ${BUILD_NUMBER}\n Build_URL: ${BUILD_URL}"
+    --message "Job_Name: ${JOB_NAME}\n Deployment_Status: $DEPLOYMENT\n Deployment_Image: $IMAGE\n Ingress_URL: $INGRESS_URL\n  Nodes: $NODES\n No_PODS: $PODS\n Pods_ips: $PODS_IPS\n Build_Number: ${BUILD_NUMBER}\n Build_URL: ${BUILD_URL}"
     '''
 }
 
