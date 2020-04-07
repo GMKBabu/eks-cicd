@@ -225,12 +225,11 @@ pipeline {
 def NotifyEmail() {
     sh '''
     NODES=$(/root/bin/kubectl get nodes -n babu -o wide | grep -i Ready | wc -l)
-    '''
-    echo "NO of nodes: $NODES"
-    sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
+    aws sns publish --topic-arn \"${TOPIC_ARN}\" \
     --region \"${AWS_DEFAULT_REGION}"\
     --subject \"Status: Job_Name: ${JOB_NAME}\" \
-    --message "Job_Name: ${JOB_NAME}\n Nodes: $NODES\n Build_Number: ${BUILD_NUMBER}\n Build_URL: ${BUILD_URL}"'
+    --message "Job_Name: ${JOB_NAME}\n Nodes: $NODES\n Build_Number: ${BUILD_NUMBER}\n Build_URL: ${BUILD_URL}"
+    '''
 }
 
 
