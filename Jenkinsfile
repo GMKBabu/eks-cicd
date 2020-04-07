@@ -31,11 +31,6 @@ pipeline {
 		ID = "${IMAGE_REPO_NAME}"
 		IMAGE_NAME = "${IMAGE_REPO_NAME}:${CUSTOM_TAG}"
         TOPIC_ARN = "arn:aws:sns:us-east-1:504263020452:config-topic"
-        NODES=""
-        dEPLOYMENT=""
-        IMAGE=""
-        PODS=""
-        PODS_IPS="" 
     }
     parameters {
         string (name: 'GITHUB_BRANCH_NAME', defaultValue: 'master', description: 'Git branch to build')
@@ -184,7 +179,7 @@ pipeline {
                         """
                         sh "sleep 5"
                     }
-                }/*
+                }
                 stage('Test Deployment') {
                     steps{
                         sh '''
@@ -195,7 +190,7 @@ pipeline {
                             PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}') 
                         '''
                     }
-                }*/
+                }
                 stage("Check Ingress Url") {
                     steps {
 			            sh '''
@@ -227,27 +222,20 @@ pipeline {
 
     }
 }
-/*
 def NotifyEmail() {
     sh 'aws sns publish --topic-arn \"${TOPIC_ARN}\" \
     --region \"${AWS_DEFAULT_REGION}"\
     --subject \"Status: Job_Name: ${JOB_NAME}\" \
-    --message "Job_Name: ${JOB_NAME}\n Build_Number: ${BUILD_NUMBER}\n Build_URL: ${BUILD_URL}"'
+    --message "Job_Name: ${JOB_NAME}\n Nodes: $NODES\n Build_Number: ${BUILD_NUMBER}\n Build_URL: ${BUILD_URL}"'
 }
+
+
+/*
 replace gmkbabu to <img src="'${WORKSPACE}'/GMKBabu.png" />
-*/
 def NotifyEmail() {
-             sh '''
-                NODES=$(/root/bin/kubectl get nodes -n babu -o wide | grep -i Ready | wc -l)
-                dEPLOYMENT=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $2,$4,$5}')
-                IMAGE=$(/root/bin/kubectl get deployment -n babu -o wide | grep cicd | awk '{ print $7}')
-                PODS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | wc -l)
-                PODS_IPS=$(/root/bin/kubectl get pod -n babu -o wide |grep -E 'cicd|Running' | awk '{ print $1,$6}') 
-                echo "test ${env.NODES}"
-              '''
         emailext (
             to: "babu.g0730@gmail.com",
-            subject: "Status: '${currentBuild.result}'",
+            subject: "Status: ${currentBuild.result}",
             attachLog: true,
             body: """<style>
                        body, table, td, th, p {
@@ -280,29 +268,9 @@ def NotifyEmail() {
                                 <td>JobName:</td>
                                 <td>${JOB_NAME}</td>
                             </tr>
-                            <tr>
-                                <td>Nodes:</td>
-                                <td>${env.NODES}</td>
-                            </tr>
-                            <tr>
-                                <td>Deployments:</td>
-                                <td>${env.DEPLOYMNETS}</td>
-                            </tr>
-                            <tr>
-                                <td>Deploy_Image:</td>
-                                <td>${env.IMAGE}</td>
-                            </tr>
-                            <tr>
-                                <td>Pods:</td>
-                                <td>${env.PODS}</td>
-                            </tr>
-                            <tr>
-                                <td>Pods_ips:</td>
-                                <td>${env.PODS_IPS}</td>
-                            </tr>
                     </table>
                     <br />
                   </body>"""
                 )
-}
+}*/
 
